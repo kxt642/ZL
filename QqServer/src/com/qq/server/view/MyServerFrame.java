@@ -12,6 +12,8 @@ import com.qq.server.model.MyQqServerClose;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 public class MyServerFrame extends JFrame implements ActionListener {
 
 	
@@ -31,13 +33,12 @@ public class MyServerFrame extends JFrame implements ActionListener {
 		jb1=new JButton("启动服务器");
 		jb1.addActionListener(this);
 		jb2=new JButton("关闭服务器");
-		//jb2.addActionListener(this); //3-18修改
+		jb2.addActionListener(this); //3-18修改
 		jp1.add(jb1);
 		jp1.add(jb2);
 		
 		
 		this.add(jp1);
-		//this.add(jb2); //3-18修改
 		this.setSize(500, 400);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
@@ -48,14 +49,15 @@ public class MyServerFrame extends JFrame implements ActionListener {
 		if(arg0.getSource()==jb1)
 		{
 			new MyQqServer();
+			
 		}
 		
 		//3-18 修改
-//		else if(arg0.getSource()==jb2)
-//		{
-//			
-//			new MyQqServerClose();
-//		}
+		else if(arg0.getSource()==jb2)
+		{
+			this.dispose();
+			//new MyQqServerClose();
+		}
 	}
 	
 
