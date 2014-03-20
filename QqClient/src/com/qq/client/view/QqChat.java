@@ -20,7 +20,9 @@ import java.io.*;
 public class QqChat extends JFrame implements ActionListener{
 
 	private JTextArea jta;
-	public static JTextField jtf;
+	
+	//public static JTextField jtf; 大牛写的 已淘汰
+	public static JTextArea jtf;  //3-20修改
 	JButton jb;//sendButton
 	JButton jb1;//自己添加第一次 公式按钮
 	JPanel jp;
@@ -36,16 +38,28 @@ public class QqChat extends JFrame implements ActionListener{
 //		
 //		}
 	}
+	
+	/*
 	public  JTextField getTextFiled()
 	{
 		return this.jtf;
 	}
+	*/
+	
+	//3-20修改
+	public JTextArea getJTextArea()
+	{
+		return this.jtf;
+	}
+	
 	public QqChat(String ownerId,String friend)
 	{
 		this.ownerId=ownerId;
 		this.friendId=friend;
 		jta=new JTextArea();
-		jtf=new JTextField(30);
+		jta.setEditable(false);  //3-20 聊天内容文本域禁止编辑
+		//jtf=new JTextField(30);  3-20 删除
+		jtf=new JTextArea(3,35);  //3-20
 		jb=new JButton("发送");
 		jb.addActionListener(this);
 		
@@ -53,16 +67,19 @@ public class QqChat extends JFrame implements ActionListener{
 		jb1.addActionListener(this);
 		
 		jp=new JPanel();
+		
 		jp.add(jtf);
+		
 		jp.add(jb);
 		
 		jp.add(jb1);  //自己添加第一次
 		
+		//this.add(jta,"North");
 		this.add(jta,"Center");
 		this.add(jp,"South");
 		this.setTitle(ownerId+" 正在和 "+friend+" 聊天");
 		this.setIconImage((new ImageIcon("image/ydy.png").getImage()));
-		this.setSize(400, 200);
+		this.setSize(500, 300);
 		this.setLocation(300, 200); //3-18修改  放置位置 
 		this.setVisible(true);
 		
@@ -72,8 +89,9 @@ public class QqChat extends JFrame implements ActionListener{
 	//写一个方法，让它显示消息
 	public void showMessage(Message m)
 	{
-		String info=m.getSender()+" 对 "+m.getGetter()+" 说:"+m.getCon()+"\r\n";
+		String info=m.getSender()+" 对 "+m.getGetter()+" 说         "+m.getSendTime()+"\n"+m.getCon()+"\r\n";
 		this.jta.append(info);
+		
 	}
 	
 	
@@ -88,7 +106,13 @@ public class QqChat extends JFrame implements ActionListener{
 			m.setSender(this.ownerId);
 			m.setGetter(this.friendId);
 			m.setCon(jtf.getText());
+			jtf.setText(null); //3-20 添加 解决了发送之后
 			m.setSendTime(new java.util.Date().toString());
+			
+			//在自己的聊天界面显示发送的信息
+			String infomy=m.getSender()+" 对 "+m.getGetter()+" 说         "+m.getSendTime()+"\n"+m.getCon()+"\r\n";
+			this.jta.append(infomy);
+			
 			//发送给服务器.
 			try {
 				ObjectOutputStream oos=new ObjectOutputStream

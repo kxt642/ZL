@@ -9,6 +9,7 @@
 package com.qq.client.view;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,7 +20,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class TermEditDialog extends  JDialog{
+
+
+
+public class TermEditDialog extends JDialog implements ActionListener{
 
 	/**
 	 * 
@@ -30,10 +34,15 @@ public class TermEditDialog extends  JDialog{
     private JButton okButton;
     private JButton cancelButton;
     private JPanel jPanel;
-    public String getTextContent()
-    {
-    	return jTextArea.getText();
-    }
+    
+   
+    
+    //3-20 删除的，感觉没有用到
+//    public String getTextContent()
+//    {
+//    	return jTextArea.getText();
+//    }
+    
     public TermEditDialog()
     {
     	jTextArea=new JTextArea();
@@ -41,6 +50,11 @@ public class TermEditDialog extends  JDialog{
     	jPanel=new JPanel();
     	okButton=new JButton("确定");
     	cancelButton=new JButton("取消");
+    	
+    	okButton.addActionListener(this); //3-20增加
+    	cancelButton.addActionListener(this); //3-20增加
+    	
+    	/*
     	okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -55,6 +69,8 @@ public class TermEditDialog extends  JDialog{
 				dispose();		
 			}
 		});
+		       3-20 取消*/
+    	
     	setLayout(new BorderLayout());
     	jPanel.add(okButton);
     	jPanel.add(cancelButton);
@@ -68,4 +84,18 @@ public class TermEditDialog extends  JDialog{
     	setLocation(800, 200); //3-18
     	setVisible(true);
     }
+
+	//3-20修改
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource()==okButton) 
+		{
+			 QqChat.jtf.setText(jTextArea.getText());
+			 jTextArea.setText(null);
+		}
+		else if (e.getSource()==cancelButton) 
+		{
+			dispose();
+		}
+		
+	}
 }
