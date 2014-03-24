@@ -15,7 +15,7 @@ public class CommonaJdbc {
 	public static void main(String [] args)
 	 {
 		String driverName="com.microsoft.sqlserver.jdbc.SQLServerDriver";
-		String dbURL="jdbc:sqlserver://localhost:1433;DatabaseName=NWPUMQ";
+		String dbURL="jdbc:sqlserver://localhost:1433;DatabaseName=ZL";
 		String userName="tkx";
 		String userPwd="12306";
 		try
