@@ -128,6 +128,7 @@ public class QqFriendList extends JFrame implements ActionListener,MouseListener
 		this.add(jpmsr1,"2");
 		//在窗口显示自己的编号.
 		this.setTitle(ownerId);
+		this.setIconImage(new ImageIcon("image/ZL.jpg").getImage());
 		this.setSize(200, 400);
 		this.setLocation(1100, 100);  //3-18修改  设置位置
 		this.setVisible(true);

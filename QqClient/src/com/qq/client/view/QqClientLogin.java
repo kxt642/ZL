@@ -21,13 +21,19 @@ public class QqClientLogin extends JFrame implements ActionListener{
 	//定义中部需要的组件
 	//.中部有三个JPanel,有一个叫选项卡窗口管理
 	JTabbedPane jtp;
-	JPanel jp2,jp3,jp4;
+	JPanel jp2,jp3;
 	JLabel jp2_jbl1,jp2_jbl2,jp2_jbl3,jp2_jbl4;
 	JButton jp2_jb1;
 	JTextField jp2_jtf;
 	JPasswordField jp2_jpf;
 	JCheckBox jp2_jcb1,jp2_jcb2;
 	
+	//定义手机登陆3-24
+	JLabel jp3_jbl1,jp3_jbl2,jp3_jbl3,jp3_jbl4;
+	JButton jp3_jb1;
+	JTextField jp3_jtf;
+	JPasswordField jp3_jpf;
+	JCheckBox jp3_jcb1,jp3_jcb2;
 	
 	
 	//定义南部需要的组件
@@ -77,10 +83,38 @@ public class QqClientLogin extends JFrame implements ActionListener{
 		//创建选项卡窗口
 		jtp=new JTabbedPane();
 		jtp.add("用户账号",jp2);
-		jp3= new JPanel();
-		jtp.add("手机号码",jp3);
-		jp4=new JPanel();
-		jtp.add("电子邮件",jp4);
+		jp3= new JPanel(new GridLayout(3,3));
+		jtp.add("手机账号",jp3);
+		
+		
+		//手机登陆3-24
+        
+		
+		jp3_jbl1=new JLabel("手机号码",JLabel.CENTER);
+		jp3_jbl2=new JLabel("账号密码",JLabel.CENTER);
+		jp3_jbl3=new JLabel("忘记密码",JLabel.CENTER);
+		jp3_jbl3.setForeground(Color.blue);
+		jp3_jbl4=new JLabel("申请密码保护",JLabel.CENTER);
+		jp3_jb1=new JButton(new ImageIcon("image/clear.gif"));
+		jp3_jtf=new JTextField();
+		jp3_jpf=new JPasswordField();
+		jp3_jcb1=new JCheckBox("隐身登录");
+		jp3_jcb2=new JCheckBox("记住密码");
+		
+		//把控件按照顺序加入到jp2
+		jp3.add(jp3_jbl1);
+		jp3.add(jp3_jtf);
+		jp3.add(jp3_jb1);
+		jp3.add(jp3_jbl2);
+		jp3.add(jp3_jpf);
+		jp3.add(jp3_jbl3);
+		jp3.add(jp3_jcb1);
+		jp3.add(jp3_jcb2);
+		jp3.add(jp3_jbl4);
+		
+		//3-24删除
+//		jp4=new JPanel();
+//		jtp.add("电子邮件",jp4);
 		
 		//处理南部
 		jp1=new JPanel();
@@ -89,7 +123,9 @@ public class QqClientLogin extends JFrame implements ActionListener{
 		jp1_jb1.addActionListener(this);
 		jp1_jb2=new JButton(new ImageIcon("image/quxiao.gif"));
 		
+		jp1_jb2.addActionListener(this); //3-24响应用户点击取消
 		jp1_jb3=new JButton(new ImageIcon("image/xiangdao.gif"));
+		jp1_jb3.addActionListener(this); //3-24响应用户点击注册
 		
 		//把三个按钮放入到jp1
 		jp1.add(jp1_jb1);
@@ -100,6 +136,8 @@ public class QqClientLogin extends JFrame implements ActionListener{
 		this.add(jtp,"Center");
 		//..把jp1放在南部
 		this.add(jp1,"South");
+		this.setTitle("欢迎使用砖聊！");
+		this.setIconImage((new ImageIcon("image/ZL.jpg").getImage()));
 		this.setSize(350, 240);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null); //3-18修改 窗口放置于中央
@@ -145,6 +183,18 @@ public class QqClientLogin extends JFrame implements ActionListener{
 			}else{
 				JOptionPane.showMessageDialog(this,"用户名密码错误");
 			}
+		}
+		
+		//用户点击取消的响应
+		else if (arg0.getSource()==jp1_jb2) 
+		{
+			this.dispose();
+		}
+		
+		//用户点击注册的响应
+		else if (arg0.getSource()==jp1_jb3) 
+		{
+			new RegisterDialog();	
 		}
 	}
 
