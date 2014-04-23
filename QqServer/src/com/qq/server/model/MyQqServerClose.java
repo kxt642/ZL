@@ -3,6 +3,7 @@
  * 修改人：tkx
  * 修改时间：3-18
  * 没有写好，无用
+ * 可以直接删除这个
  */
 
 package com.qq.server.model;

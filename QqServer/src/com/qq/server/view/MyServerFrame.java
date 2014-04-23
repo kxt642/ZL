@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import com.qq.server.model.MyQqServer;
 import com.qq.server.model.MyQqServerClose;
+import com.qq.server.model.ZLServer;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -48,7 +49,8 @@ public class MyServerFrame extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		if(arg0.getSource()==jb1)
 		{
-			new MyQqServer();
+			new MyQqServer(); 
+			//new ZLServer(); 4-8还不能用啊！！！
 			
 		}
 		
