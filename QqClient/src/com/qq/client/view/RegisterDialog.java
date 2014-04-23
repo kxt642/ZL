@@ -39,7 +39,7 @@ public class RegisterDialog extends JFrame implements ActionListener
 	ButtonGroup SEX; //3-24 night
 	JLabel ZLNUM,ZLINFO; //3-24night
 	JTextField ZLNUM_F; //3-24night
-	
+	String sex; //3-25添加
 	//定义南部需要的组件
 	JPanel southJPanel;
 	JButton okJButton,cancelJButton;
@@ -152,7 +152,13 @@ public class RegisterDialog extends JFrame implements ActionListener
 			String truename=new String(Name_jtf.getText()).trim();
 			
 			//有待修改
-			String sexInfo =new String(((JRadioButton)e.getSource()).getText());
+			String sexInfo =sex;//3-25
+			
+//			if (nickname == null || nickname.equals(""))
+//			{
+//	            JOptionPane.showMessageDialog(this, "用户名不能为空！");
+//	            NickName_jtf.requestFocus();
+//			}//3-25
 			
 			if (nickname == null || nickname.equals(""))
 			{
@@ -226,4 +232,19 @@ public class RegisterDialog extends JFrame implements ActionListener
         return ZLnum;
 	}
 
+	//3-25添加--作用：获取性别
+	public void radioButton_itemStateChanged(ItemEvent e) 
+	{
+        if (manBox.isSelected()) {
+            sex = "男";
+        } else if (womenBox.isSelected()) {
+            sex = "女";
+        }
+    }
+	//3-25添加--作用：获取性别
+	public void itemStateChanged(ItemEvent e) 
+	{
+	        radioButton_itemStateChanged(e);
+	}
+	 
 }

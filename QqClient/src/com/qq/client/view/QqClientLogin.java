@@ -65,8 +65,11 @@ public class QqClientLogin extends JFrame implements ActionListener{
 		jp2_jbl3.setForeground(Color.blue);
 		jp2_jbl4=new JLabel("申请密码保护",JLabel.CENTER);
 		jp2_jb1=new JButton(new ImageIcon("image/clear.gif"));
+		jp2_jb1.addActionListener(this);  //3-26  增加清除号码的监听
 		jp2_jtf=new JTextField();
+		jp2_jtf.setText("1");
 		jp2_jpf=new JPasswordField();
+		jp2_jpf.setText("123");
 		jp2_jcb1=new JCheckBox("隐身登录");
 		jp2_jcb2=new JCheckBox("记住密码");
 		
@@ -118,12 +121,13 @@ public class QqClientLogin extends JFrame implements ActionListener{
 		
 		//处理南部
 		jp1=new JPanel();
-		jp1_jb1=new JButton(new ImageIcon("image/denglu.gif"));
-		//响应用户点击登录
-		jp1_jb1.addActionListener(this);
-		jp1_jb2=new JButton(new ImageIcon("image/quxiao.gif"));
 		
+		jp1_jb1=new JButton(new ImageIcon("image/denglu.gif"));
+		jp1_jb1.addActionListener(this);//响应用户点击登录
+		
+		jp1_jb2=new JButton(new ImageIcon("image/quxiao.gif"));
 		jp1_jb2.addActionListener(this); //3-24响应用户点击取消
+		
 		jp1_jb3=new JButton(new ImageIcon("image/xiangdao.gif"));
 		jp1_jb3.addActionListener(this); //3-24响应用户点击注册
 		
@@ -195,6 +199,13 @@ public class QqClientLogin extends JFrame implements ActionListener{
 		else if (arg0.getSource()==jp1_jb3) 
 		{
 			new RegisterDialog();	
+		}
+		
+		//用户点击清除号码 3-26
+		else if (arg0.getSource()==jp2_jb1) 
+		{
+			jp2_jtf.setText("");
+			jp2_jpf.setText("");
 		}
 	}
 

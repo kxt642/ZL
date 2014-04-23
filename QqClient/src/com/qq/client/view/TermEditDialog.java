@@ -46,7 +46,7 @@ public class TermEditDialog extends JFrame implements ActionListener{
     
     public TermEditDialog()
     {
-    	jTextArea=new JTextArea();
+    	jTextArea=new JTextArea("$"+"    "+"$");
     	jScrollPane=new JScrollPane(jTextArea);
     	jPanel=new JPanel();
     	okButton=new JButton("È·¶¨");
@@ -95,7 +95,8 @@ public class TermEditDialog extends JFrame implements ActionListener{
 		}
 		else if (e.getSource()==cancelButton) 
 		{
-			dispose();
+			//dispose();
+			jTextArea.setText("$"+"    "+"$");//4-1
 		}
 		
 	}

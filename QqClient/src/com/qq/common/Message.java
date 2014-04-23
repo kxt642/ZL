@@ -1,5 +1,9 @@
 package com.qq.common;
 
+import javax.swing.text.StyledDocument;
+
+
+
 public class Message implements java.io.Serializable{
 
 	private String mesType;
@@ -7,7 +11,11 @@ public class Message implements java.io.Serializable{
 	private String sender;
 	private String getter;
 	private String con;
+	
 	private String sendTime;
+
+	
+	
 	public String getSender() {
 		return sender;
 	}
@@ -47,4 +55,8 @@ public class Message implements java.io.Serializable{
 	public void setMesType(String mesType) {
 		this.mesType = mesType;
 	}
+
+	
+	
+
 }
