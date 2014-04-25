@@ -389,8 +389,9 @@ public class QqChat extends JFrame implements ActionListener{
 			//4-21 还有点问题，接收方图片显示不了
 			if(m.equals(ImgPath)) {
 				try {
+					jta.setCaretPosition(doc.getLength());//4-24新内容接后
 					jta.insertIcon(new ImageIcon(ImageIO
-							.read(new FileInputStream(ImgPath))));
+							.read(new FileInputStream(ImgPath))));	
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -527,8 +528,11 @@ public class QqChat extends JFrame implements ActionListener{
 				
 				try 
 				{
+					jta.setCaretPosition(doc.getLength());//4-24新输入的内容接到已输入内容的尾部了
+					
 					jta.insertIcon(new ImageIcon(ImageIO
 							.read(new FileInputStream(ImgPath))));//4-21显示图片
+					
 					doc.insertString(doc.getLength(), "\n\n", null);//4-21night 换行之用
 					
 					/*
