@@ -40,8 +40,8 @@ public class ClientConServerThread extends Thread {
 					qqChat.showMessage(m);
 				}else if(m.getMesType().equals(MessageType.message_ret_onLineFriend))
 				{
-					System.out.println("客户端接收到"+m.getCon());
-					String con=m.getCon();
+					System.out.println("客户端接收到"+m.getCon());  //4-28 后面可能需要修改这句
+					String con=m.getCon();  //4-28 后面可能需要修改这句
 					String friends[]=con.split(" ");
 					String getter=m.getGetter();
 					System.out.println("getter="+getter);

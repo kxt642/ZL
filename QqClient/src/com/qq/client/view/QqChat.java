@@ -6,6 +6,11 @@ package com.qq.client.view;
 
 
 
+
+import com.qq.client.view.FontAttr;
+
+import com.qq.client.view.*;
+
 import com.qq.client.tools.*;
 
 import com.qq.client.model.*;
@@ -16,6 +21,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
@@ -25,9 +31,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;  //4-10
 import java.io.*;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 //import com.qq.client.view.FaceFrame;//4-16night
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 
 public class QqChat extends JFrame implements ActionListener{
@@ -68,6 +79,12 @@ public class QqChat extends JFrame implements ActionListener{
 	public String ImgPath="";//4-16图片路径判断？
 	public static int faceIdx=-1; //4-16 表情的索引
 	
+	//private Socket s = null;//4-28
+	//private ObjectOutputStream oos = null;//4-28
+	private SimpleAttributeSet msgAttrSet = new SimpleAttributeSet();//4-28发送和接受消息面板的样式
+	private SimpleAttributeSet tipAttrSet = null;//4-28  显示发送人和时间的样式
+	private Font f = null; // 字体对话框返回的字体。
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//QqChat qqChat=new QqChat("1");
@@ -94,6 +111,16 @@ public class QqChat extends JFrame implements ActionListener{
 	}
 	*/
 	
+	
+	//4-28 字体之用
+	public Font getF() {
+		return f;
+	}
+
+	public void setF(Font f) {
+		this.f = f;
+	}
+	
 	//4-16重新写
 	public JTextPane getJTextPane() 
 	{
@@ -119,10 +146,31 @@ public class QqChat extends JFrame implements ActionListener{
 		jp_accept.add(jScrollPane,BorderLayout.CENTER);
 		//4-14
 		
-		
+		//4-28初始化字体
+		FontAttr fa = new FontAttr(new Font("楷体", Font.PLAIN, 12), Color.BLUE,
+				Color.WHITE);
+		tipAttrSet = fa.getAttributeSet();
+		setF(new Font("楷体", Font.PLAIN, 12));
+		//4-28afternoon
 		
 		JL_Font=new JLabel(new ImageIcon(
 				"image/img/chat/fun_font_32.png"));//工具面板内容--字体4-14  4-15
+		//4-28 给字体添加监听
+		JL_Font.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e){
+				FontDialog fd=new FontDialog(QqChat.this);
+				fd.setVisible(true);
+				if (QqChat.this.getF()!=null) 
+				{
+					FontAttr fa = new FontAttr(msgAttrSet, QqChat.this.getF());
+					// System.out.println(fa);
+					msgAttrSet = fa.getAttributeSet();
+					jtf.setParagraphAttributes(msgAttrSet, true);
+					jta.setParagraphAttributes(msgAttrSet, true);
+				}
+			}
+		});
+		//4-28
 		
 		//工具面板内容--表情4-14 4-15
 		JL_biaoqing=new JLabel((new ImageIcon(
@@ -180,11 +228,19 @@ public class QqChat extends JFrame implements ActionListener{
 					}
 				});
 				fc.setCurrentDirectory(new File("C:\\Users\\melo_t\\Desktop"));
-				int result = fc.showOpenDialog(null);
+				int result = fc.showOpenDialog(null);//4-28修改
 				
 				//选择打开时
 				if (result == JFileChooser.APPROVE_OPTION) 
 				{
+					//4-28
+					//File f = fc.getSelectedFile();
+					//List<File> imgs = new ArrayList<File>();
+					//imgs.add(f);
+					//Message m=new Message();
+					//m.setImgs(imgs); 4-28
+					//4-28
+					
 					String filePath = fc.getSelectedFile().getAbsolutePath();
 					// 给图片添加路径
 					ImgPath = filePath;
@@ -482,6 +538,7 @@ public class QqChat extends JFrame implements ActionListener{
 				doc.insertString(doc.getLength(),
 						m.getSender()+" 对 "+m.getGetter()+" 说         "+m.getSendTime()+"\n"+m.getCon()+"\r\n\n",
 						null);
+				
 			} catch (BadLocationException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -508,7 +565,7 @@ public class QqChat extends JFrame implements ActionListener{
 			else if (!"".equals(ImgPath)) 
 			{
 				
-				m.setCon(jtf.getText());//应该存在问题4-21  4-23
+				//m.setCon(jtf.getText());//应该存在问题4-21  4-23 4-28
 				
 				jtf.setText(null); 
 				m.setSendTime(DateFormat.getTimeInstance().format(new Date()));
@@ -569,10 +626,13 @@ public class QqChat extends JFrame implements ActionListener{
 					//4-23
 					*/
 					
+					//4-28
 					ObjectOutputStream fos=new ObjectOutputStream
 							(ManageClientConServerThread.getClientConServerThread(ownerId).getS().getOutputStream());
 					fos.writeObject(m);
 					
+					
+					//sendMsg(m);//4-28
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -670,7 +730,53 @@ public class QqChat extends JFrame implements ActionListener{
 	}
 	*/
 	
+	/*
+	//4-28 connect to server
+	public void connect() {
+		try {
+			s = new Socket(InetAddress.getLocalHost(), 9999);
+			oos = new ObjectOutputStream(s.getOutputStream());
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	//4-28 send msg to server
+	public void sendMsg(Message m)
+	{
+		try {
+			oos.writeObject(m);
+			oos.flush();
+		} catch (IOException e) {
+			System.out.println("send msg failed.");
+			e.printStackTrace();
+		}
+	}
+	// 4-28disconnect to server when exit.
+		public void disconnect() {
+			try {
+				if (oos != null)
+					oos.close();
+				if (s != null)
+					s.close();
+			} catch (IOException e) {
+				System.out.println("exit chat.");
+				e.printStackTrace();
+			}
+		}
+	*/
+		
+	public SimpleAttributeSet getMsgAttrSet() {
+		return msgAttrSet;
+	}
 
+	public void setMsgAttrSet(SimpleAttributeSet msgAttrSet) {
+		this.msgAttrSet = msgAttrSet;
+	}
+		
 //	public void run() {
 //		// TODO Auto-generated method stub
 //		while(true)
