@@ -71,7 +71,7 @@ public class SerConClientThread  extends Thread{
 					String res=ManageClientThread.getAllOnLineUserid();
 					Message m2=new Message();
 					m2.setMesType(MessageType.message_ret_onLineFriend);
-					m2.setCon(res);
+					m2.setCon(res);  //4-28 后面要发送图片可能需要修改这句
 					m2.setGetter(m.getSender());
 					ObjectOutputStream oos=new ObjectOutputStream(s.getOutputStream());
 					oos.writeObject(m2);

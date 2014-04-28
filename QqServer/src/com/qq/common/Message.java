@@ -1,5 +1,9 @@
 package com.qq.common;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Message implements java.io.Serializable{
 
 	private String mesType;
@@ -9,6 +13,8 @@ public class Message implements java.io.Serializable{
 	private String con;
 	private String sendTime;
 
+	private List<File> imgs = new ArrayList<File>();// Í¼Æ¬ÏûÏ¢ 4-28
+	
 	public String getSender() {
 		return sender;
 	}
