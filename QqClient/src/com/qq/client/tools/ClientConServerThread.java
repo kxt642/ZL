@@ -38,6 +38,9 @@ public class ClientConServerThread extends Thread {
 					QqChat qqChat=ManageQqChat.getQqChat(m.getGetter()+" "+m.getSender());
 					//显示
 					qqChat.showMessage(m);
+					
+					//qqChat.toFront();//4-28night 为了将此窗口置于前端 没有ok
+					
 				}else if(m.getMesType().equals(MessageType.message_ret_onLineFriend))
 				{
 					System.out.println("客户端接收到"+m.getCon());  //4-28 后面可能需要修改这句

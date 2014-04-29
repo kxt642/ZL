@@ -18,7 +18,7 @@ public class Message implements java.io.Serializable{
 	private String con;
 	
 	
-	//private String msgContent;// 文本消息 4-28
+	private String msgContent;// 文本消息 4-28
 	private List<File> imgs = new ArrayList<File>();// 图片消息 4-28
 	
 	private String sendTime;
@@ -68,7 +68,7 @@ public class Message implements java.io.Serializable{
 	
 	
 
-	/*
+	
 	//4-28
 	public Message()
 	{
@@ -120,5 +120,5 @@ public class Message implements java.io.Serializable{
 		}
 		return true;
 	}
-	*/
+	//4-28
 }

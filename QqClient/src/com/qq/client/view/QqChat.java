@@ -79,8 +79,9 @@ public class QqChat extends JFrame implements ActionListener{
 	public String ImgPath="";//4-16图片路径判断？
 	public static int faceIdx=-1; //4-16 表情的索引
 	
-	//private Socket s = null;//4-28
-	//private ObjectOutputStream oos = null;//4-28
+	private Socket s = null;//4-28afternoon
+	private ObjectOutputStream oos = null;//4-28afternoon
+	
 	private SimpleAttributeSet msgAttrSet = new SimpleAttributeSet();//4-28发送和接受消息面板的样式
 	private SimpleAttributeSet tipAttrSet = null;//4-28  显示发送人和时间的样式
 	private Font f = null; // 字体对话框返回的字体。
@@ -228,17 +229,21 @@ public class QqChat extends JFrame implements ActionListener{
 					}
 				});
 				fc.setCurrentDirectory(new File("C:\\Users\\melo_t\\Desktop"));
-				int result = fc.showOpenDialog(null);//4-28修改
+				int result = fc.showOpenDialog(QqChat.this);//4-28修改
 				
 				//选择打开时
 				if (result == JFileChooser.APPROVE_OPTION) 
 				{
-					//4-28
-					//File f = fc.getSelectedFile();
-					//List<File> imgs = new ArrayList<File>();
-					//imgs.add(f);
-					//Message m=new Message();
-					//m.setImgs(imgs); 4-28
+					//4-28 afternoon
+					File fi = fc.getSelectedFile(); //4-28afternoon
+					List<File> imgs = new ArrayList<File>();
+					imgs.add(fi);  //4-28afternoon
+					Message m=new Message();
+					m.setMesType(MessageType.message_comm_mes);
+					m.setSender(QqChat.this.ownerId);
+					m.setGetter(QqChat.this.friendId);
+					m.setImgs(imgs); 
+					sendMsg(m);
 					//4-28
 					
 					String filePath = fc.getSelectedFile().getAbsolutePath();
@@ -443,11 +448,23 @@ public class QqChat extends JFrame implements ActionListener{
 		
 			
 			//4-21 还有点问题，接收方图片显示不了
-			if(m.equals(ImgPath)) {
+			if(m.getImgs()!=null&&m.getImgs().size()>0) {
+				List<File> imgs = m.getImgs();//4-28night
+				m.setSendTime(DateFormat.getTimeInstance().format(new Date()));//4-28night
 				try {
+					doc.insertString(doc.getLength(),
+							m.getSender()+" 对 "+m.getGetter()+" 说         "+m.getSendTime()+"\n"+"\r\n" , null);//4-28night
 					jta.setCaretPosition(doc.getLength());//4-24新内容接后
-					jta.insertIcon(new ImageIcon(ImageIO
-							.read(new FileInputStream(ImgPath))));	
+					
+					//4-28night
+					for (int i = 0; i < imgs.size(); i++) 
+					{
+						File fi = imgs.get(i);
+						jta.insertIcon(new ImageIcon(ImageIO
+								.read(fi)));	
+					}
+					doc.insertString(doc.getLength(), "\n", null);//4-28night
+					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -566,7 +583,10 @@ public class QqChat extends JFrame implements ActionListener{
 			{
 				
 				//m.setCon(jtf.getText());//应该存在问题4-21  4-23 4-28
-				
+				//m.setImgs(imgs);4-28 没有想好怎么样
+				//List<File> imgs = m.getImgs();//4-28night
+				//m.setImgs(imgs);//4-28night
+				m.setCon(ImgPath);//4-28night
 				jtf.setText(null); 
 				m.setSendTime(DateFormat.getTimeInstance().format(new Date()));
 				
@@ -730,7 +750,7 @@ public class QqChat extends JFrame implements ActionListener{
 	}
 	*/
 	
-	/*
+	
 	//4-28 connect to server
 	public void connect() {
 		try {
@@ -748,8 +768,12 @@ public class QqChat extends JFrame implements ActionListener{
 	public void sendMsg(Message m)
 	{
 		try {
+			ObjectOutputStream oos=new ObjectOutputStream
+					(ManageClientConServerThread.getClientConServerThread(ownerId).getS().getOutputStream());
 			oos.writeObject(m);
 			oos.flush();
+			//oos.writeObject(m);
+			//oos.flush();
 		} catch (IOException e) {
 			System.out.println("send msg failed.");
 			e.printStackTrace();
@@ -767,7 +791,7 @@ public class QqChat extends JFrame implements ActionListener{
 				e.printStackTrace();
 			}
 		}
-	*/
+	
 		
 	public SimpleAttributeSet getMsgAttrSet() {
 		return msgAttrSet;
