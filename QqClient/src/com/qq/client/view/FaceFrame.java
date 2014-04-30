@@ -30,30 +30,30 @@ import com.qq.client.view.QqChat;
 
 public class FaceFrame extends JWindow
 {
-	private static final long serialVersionUID=1L;//4-16night
+	//private static final long serialVersionUID=1L;//4-16night   4-29注释
 	
 	private JPanel contentPane;
 	
-	GridLayout gridLayout1 = new GridLayout(7,15);//4-16night
-	public static JLabel[] ico = new JLabel[105];//4-16night
-	QqChat owner; // 4-16night
+	GridLayout gridLayout1 = new GridLayout();//4-16night
+	public static JLabel[] ico = new JLabel[108];//4-16night
+	QqChat chat; // 4-16night
 	int width=720;
 	int height=288;
 	//MouseAdapter mouseAdapter;
 	
 	
-	public FaceFrame(QqChat owner)
+	public FaceFrame(QqChat chat)
 	{
-		super(owner);
-		this.owner = owner;
+		super(chat);
+		this.chat = chat;
 		try
 		{
 			jbInit();
 			
 			//4-23
-			//int left=owner.getLocation().x+20;
-			//int top=owner.getLocation().y+owner.getHeight()-200-height;
-			//this.setBounds(left, top, width, height);
+			int left=chat.getLocation().x+20;
+			int top=chat.getLocation().y+chat.getHeight()-200-height;
+			this.setBounds(left, top, width, height);
 			
 			this.setAlwaysOnTop(true);
 			this.setVisible(true);
@@ -106,11 +106,16 @@ public class FaceFrame extends JWindow
 			if(i<10)
         	{
         		fileName= "image/img/face/f00"+i+".png";//修改图片路径 
+				//fileName="image/img/face/f000.png";//4-29修改
         		//fileName="D:\\毕设\\code\\QqClient\\image\\img\\face\\f00"+i+".png";
         	}
-        	else
+        	else if(i>=10&&i<100)
         	{
         		fileName= "image/img/face/f0"+i+".png";
+			}
+			else 
+			{
+				fileName="image/img/face/f"+i+".png";
 			}
 			//ico[i]=new JLabel(new ImageIcon(FaceFrame.class.getResource(fileName)));//4-23
 			
@@ -124,8 +129,8 @@ public class FaceFrame extends JWindow
 			{
 				public void mouseClicked(MouseEvent e)
 				{
-					owner.jtf.insertIcon(img);
-					owner.faceIdx=count;
+					chat.jtf.insertIcon(img);
+					chat.faceIdx=count;
 					getObj().dispose();// 这里最好用单例模式
 				}
 			});

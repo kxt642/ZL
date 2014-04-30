@@ -7,6 +7,9 @@ package com.qq.client.view;
 
 
 
+
+
+import com.qq.common.MyTools;
 import com.qq.client.view.FontAttr;
 
 import com.qq.client.view.*;
@@ -180,7 +183,25 @@ public class QqChat extends JFrame implements ActionListener{
 			public void mouseClicked(MouseEvent e) {
 				selectFace();
 			}
-
+			
+			//4-29
+			public void selectFace(){
+				new FaceFrame(QqChat.this);
+				
+				/*
+				//4-29afternoon
+				int result = FaceFrame.showOpenDialog(QqChat.this);
+				File fi = fc.getSelectedFile(); //4-28afternoon
+				List<File> imgs = new ArrayList<File>();
+				imgs.add(fi);
+				Message m=new Message();
+				m.setMesType(MessageType.message_comm_mes);
+				m.setSender(QqChat.this.ownerId);
+				m.setGetter(QqChat.this.friendId);
+				m.setImgs(imgs); 
+				sendMsg(m);
+				*/
+			}
 			
 		});
 		//4-14
@@ -276,6 +297,17 @@ public class QqChat extends JFrame implements ActionListener{
 		
 		JL_Music=new JLabel(new ImageIcon(
 				"image/img/chat/fun_music_32.png"));//工具面板内容--音乐4-14 4-15
+		//4-29将其改为字体颜色
+		JL_Music.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e){
+				Color choosedcolor = JColorChooser.showDialog(QqChat.this,
+						"选择一种颜色", Color.BLACK);
+				StyleConstants.setForeground(msgAttrSet, choosedcolor);
+				jtf.setParagraphAttributes(msgAttrSet, true);
+				jta.setParagraphAttributes(msgAttrSet, true);//4-29解决接收框颜色不变化问题
+			}
+		});
+		//4-29
 		
 		//工具面板内容--截图4-14 4-15
 		JL_jietu=new JLabel(new ImageIcon(
@@ -306,7 +338,7 @@ public class QqChat extends JFrame implements ActionListener{
 		JL_biaoqing.setToolTipText("\u8868\u60c5");
 		JL_PIC.setToolTipText("\u53d1\u9001\u56fe\u7247");
 		
-		JL_Music.setToolTipText("\u53d1\u9001\u97f3\u4e50");
+		JL_Music.setToolTipText("\u5B57\u4F53\u989C\u8272");
 
 		JL_jietu.setToolTipText("\u622a\u56fe");
 		
@@ -433,13 +465,16 @@ public class QqChat extends JFrame implements ActionListener{
 		jb.setMnemonic(KeyEvent.VK_ENTER); //4-14 设置发送按钮的快捷键为Alt+Enter
 	}
 	
-	
+	/*
+	 * 4-29注释
 	 //4-23表情之用
 	protected void selectFace() {
 		// TODO Auto-generated method stub
-		new FaceFrame(this);
+		new FaceFrame(QqChat.this);
 	}
-
+	*/
+	
+	
 	//写一个方法，让它显示消息
 	public void showMessage(Message m) throws BadLocationException
 	{
@@ -534,6 +569,8 @@ public class QqChat extends JFrame implements ActionListener{
 			if("".equals(ImgPath))
 			{
 				
+			//4-29发送表情之用
+			if(faceIdx<0){
 			//发送不能为空 4-10 
 			if (jtf.getText().trim().equals("")) 
 			{
@@ -574,6 +611,45 @@ public class QqChat extends JFrame implements ActionListener{
 			}
 				
 		}
+			}
+			
+			//4-29发送表情
+			else 
+			{
+				m.setSendTime(DateFormat.getTimeInstance().format(new Date()));
+				
+				jtf.setText(null);
+				
+				
+				try {
+					doc.insertString(doc.getLength(),
+							m.getSender()+" 对 "+m.getGetter()+" 说         "+m.getSendTime()+"\n"+"\r\n\n",
+							null);
+					
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				//发送给服务器.
+				try {
+					jta.setCaretPosition(doc.getLength());
+					new MyTextPane(jta).addIcon(MyTools.getFaceByIdx(faceIdx), ownerId);
+					doc.insertString(doc.getLength(), "\n\n", null);
+					
+					ObjectOutputStream oos=new ObjectOutputStream
+					(ManageClientConServerThread.getClientConServerThread(ownerId).getS().getOutputStream());
+					oos.writeObject(m);
+					oos.flush();//4-21night清空缓冲区数据
+				} catch (Exception e) {
+					e.printStackTrace();
+					// TODO: handle exception
+				}
+				faceIdx=-1;//图片表情发完后置为默认
+			}
+			//4-29
+			
 			}
 			
 			
@@ -744,7 +820,7 @@ public class QqChat extends JFrame implements ActionListener{
 	} 
 	
 	/*
-	 4-21
+	 //4-21
 	public void selectFace(){
 		new FaceFrame(this);
 	}

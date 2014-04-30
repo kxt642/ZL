@@ -97,5 +97,19 @@ public class MyTools
 			return null;
 		}
 	}
+	
+	public static String getFaceByIdx(int idx)
+	{
+		String fileName=" ";
+		if(idx<10)
+    	{
+    		fileName= "image/img/face/f00"+idx+".png";//ÐÞ¸ÄÍ¼Æ¬Â·¾¶ 
+    	}
+    	else
+    	{
+    		fileName= "image/img/face/f0"+idx+".png";
+		}
+		return fileName;
+	}
 
 }

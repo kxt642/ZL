@@ -50,7 +50,7 @@ public class MyLabel
 	public MyLabel(JLabel jLabel,Color color)
 	{
 		this.jLabel=jLabel;
-		this.mode=1;//4-21 本来是0，现在改为1试试
+		this.mode=0;//4-21 本来是0，现在改为1试试   4-29重新改为0
 		backColor=color;
 		setEtchedBorder(backColor);
 	}
