@@ -9,6 +9,8 @@ package com.qq.client.view;
 
 
 
+import com.qq.client.view.ScreenFram;
+
 import com.qq.common.MyTools;
 import com.qq.client.view.FontAttr;
 
@@ -88,6 +90,8 @@ public class QqChat extends JFrame implements ActionListener{
 	private SimpleAttributeSet msgAttrSet = new SimpleAttributeSet();//4-28发送和接受消息面板的样式
 	private SimpleAttributeSet tipAttrSet = null;//4-28  显示发送人和时间的样式
 	private Font f = null; // 字体对话框返回的字体。
+	
+	String screenCutImgName = " ";//4-29afternoon
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -255,6 +259,8 @@ public class QqChat extends JFrame implements ActionListener{
 				//选择打开时
 				if (result == JFileChooser.APPROVE_OPTION) 
 				{
+					/*
+					 * 4-29night注释
 					//4-28 afternoon
 					File fi = fc.getSelectedFile(); //4-28afternoon
 					List<File> imgs = new ArrayList<File>();
@@ -266,7 +272,7 @@ public class QqChat extends JFrame implements ActionListener{
 					m.setImgs(imgs); 
 					sendMsg(m);
 					//4-28
-					
+					*/
 					String filePath = fc.getSelectedFile().getAbsolutePath();
 					// 给图片添加路径
 					ImgPath = filePath;
@@ -318,8 +324,24 @@ public class QqChat extends JFrame implements ActionListener{
 			}
 
 			private void screenFram() {
-				// TODO Auto-generated method stub
-				
+				// 4-29afternoon 截图
+				try
+				{
+					ScreenFram.main();
+					screenCutImgName="snap";
+					System.out.println("截图的名字是"+screenCutImgName);
+					jtf.insertIcon(new ImageIcon(ImageIO
+							.read(new FileInputStream("./image/screenCut/snap.jpg"))));
+					
+				}
+				catch (FileNotFoundException e)
+				{
+					e.printStackTrace();
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		});
 		//4-14
@@ -662,7 +684,15 @@ public class QqChat extends JFrame implements ActionListener{
 				//m.setImgs(imgs);4-28 没有想好怎么样
 				//List<File> imgs = m.getImgs();//4-28night
 				//m.setImgs(imgs);//4-28night
-				m.setCon(ImgPath);//4-28night
+				//m.setCon(ImgPath);//4-28night
+				
+				//4-29night
+				File file=new File(ImgPath);
+				ArrayList<File>arrayList=new ArrayList<>();
+				arrayList.add(file);
+				m.setImgs(arrayList);
+				//4-29night
+				
 				jtf.setText(null); 
 				m.setSendTime(DateFormat.getTimeInstance().format(new Date()));
 				
