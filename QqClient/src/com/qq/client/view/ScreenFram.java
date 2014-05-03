@@ -31,6 +31,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileSystemView;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 
 
 /**
@@ -44,13 +46,13 @@ public class ScreenFram
 {
 	public static void main()
 	{
-		// 全屏运行
+		// 全屏运行  
 		RectD rd = new RectD();
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
 				.getDefaultScreenDevice();
 		gd.setFullScreenWindow(rd);
-		System.out.println("main方法中的截图名："+ rd.name);
-		//return rd.name;
+		System.out.println("main方法中的截图名："+ rd.sc_name);
+		//return rd.sc_name;//4-30
 	}
 }
 
@@ -63,7 +65,7 @@ class RectD extends JFrame
 	BufferedImage tempImage;
 	BufferedImage saveImage;
 	Graphics g;
-	public String name;
+	public String sc_name;
 	
 	public void paint(Graphics g)
 	{
@@ -122,15 +124,19 @@ class RectD extends JFrame
 	public void saveToFile()
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyymmddHHmmss");
-		 name ="snap";
+		 //sc_name ="snap"; //4-30注释
+		
 		 //sdf.format(new Date());
 //		setName(sdf.format(new Date()));
+		
+		sc_name=sdf.format(new Date());//4-30afternoon
 		String path = "./image/screenCut/";
 		String format = "jpg";
-		File f = new File(path, name + "." + format);
+		//File f = new File(path, name + "." + format);//4-30afternoon注释
+		File fsc = new File(path+File.separator+sc_name+"."+format);//4-30afternoon
 		try
 		{
-			ImageIO.write(saveImage, format, f);
+			ImageIO.write(saveImage, format, fsc);
 		}
 		catch (IOException e)
 		{

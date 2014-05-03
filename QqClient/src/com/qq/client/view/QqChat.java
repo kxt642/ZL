@@ -91,7 +91,7 @@ public class QqChat extends JFrame implements ActionListener{
 	private SimpleAttributeSet tipAttrSet = null;//4-28  显示发送人和时间的样式
 	private Font f = null; // 字体对话框返回的字体。
 	
-	String screenCutImgName = " ";//4-29afternoon
+	String screenCutImgName = "";//4-29afternoon
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -328,11 +328,11 @@ public class QqChat extends JFrame implements ActionListener{
 				try
 				{
 					ScreenFram.main();
-					screenCutImgName="snap";
+					
 					System.out.println("截图的名字是"+screenCutImgName);
 					jtf.insertIcon(new ImageIcon(ImageIO
-							.read(new FileInputStream("./image/screenCut/snap.jpg"))));
-					
+							.read(new FileInputStream("./image/screenCut/snap.jpg"))));//4-30待改
+					screenCutImgName="snap";//4-30待改
 				}
 				catch (FileNotFoundException e)
 				{
@@ -520,7 +520,7 @@ public class QqChat extends JFrame implements ActionListener{
 						jta.insertIcon(new ImageIcon(ImageIO
 								.read(fi)));	
 					}
-					doc.insertString(doc.getLength(), "\n", null);//4-28night
+					doc.insertString(doc.getLength(), "\n\n", null);//4-28night
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -587,11 +587,11 @@ public class QqChat extends JFrame implements ActionListener{
 			m.setSender(this.ownerId);
 			m.setGetter(this.friendId);
 			
-			//4-16如果发送的是文本信息
-			if("".equals(ImgPath))
+			//4-16如果发送的是文本信息  4-30修改过，添加了截屏的发送
+			if("".equals(ImgPath) && "".equals(screenCutImgName))
 			{
 				
-			//4-29发送表情之用
+			//4-29判断是否为发送表情
 			if(faceIdx<0){
 			//发送不能为空 4-10 
 			if (jtf.getText().trim().equals("")) 
@@ -640,12 +640,19 @@ public class QqChat extends JFrame implements ActionListener{
 			{
 				m.setSendTime(DateFormat.getTimeInstance().format(new Date()));
 				
+				//4-30
+				File file=new File(MyTools.getFaceByIdx(faceIdx));
+				ArrayList<File>arrayList=new ArrayList<>();
+				arrayList.add(file);
+				m.setImgs(arrayList);
+				//4-30
+				
 				jtf.setText(null);
 				
 				
 				try {
 					doc.insertString(doc.getLength(),
-							m.getSender()+" 对 "+m.getGetter()+" 说         "+m.getSendTime()+"\n"+"\r\n\n",
+							m.getSender()+" 对 "+m.getGetter()+" 说         "+m.getSendTime()+"\n"+"\r\n",
 							null);
 					
 				} catch (BadLocationException e1) {
@@ -657,7 +664,11 @@ public class QqChat extends JFrame implements ActionListener{
 				//发送给服务器.
 				try {
 					jta.setCaretPosition(doc.getLength());
-					new MyTextPane(jta).addIcon(MyTools.getFaceByIdx(faceIdx), ownerId);
+					//new MyTextPane(jta).addIcon(MyTools.getFaceByIdx(faceIdx), ownerId);//4-30注释
+					
+					jta.insertIcon(new ImageIcon(ImageIO
+							.read(new FileInputStream(MyTools.getFaceByIdx(faceIdx)))));//4-30自己显示表情
+					
 					doc.insertString(doc.getLength(), "\n\n", null);
 					
 					ObjectOutputStream oos=new ObjectOutputStream
@@ -768,7 +779,51 @@ public class QqChat extends JFrame implements ActionListener{
 				
 			}
 			
-			
+			//4-30发送截图
+			else if (!"".equals(screenCutImgName)) 
+			{
+				try{
+				jtf.setText("");//置空发送框
+				m.setSendTime(DateFormat.getTimeInstance().format(new Date()));
+				
+				File file=new File("./image/screenCut/snap.jpg");
+				ArrayList<File>arrayList=new ArrayList<>();
+				arrayList.add(file);
+				m.setImgs(arrayList);
+				
+				try 
+				{
+					doc.insertString(doc.getLength(),
+							m.getSender()+" 对 "+m.getGetter()+" 说         "+m.getSendTime()+"\n"+"\r\n",
+							null);
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				try 
+				{
+					jta.setCaretPosition(doc.getLength());
+					
+					jta.insertIcon(new ImageIcon(ImageIO
+							.read(new FileInputStream("./image/screenCut/snap.jpg"))));
+					
+					doc.insertString(doc.getLength(), "\n\n", null);
+					
+					ObjectOutputStream fos=new ObjectOutputStream
+							(ManageClientConServerThread.getClientConServerThread(ownerId).getS().getOutputStream());
+					fos.writeObject(m);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				screenCutImgName ="";//发送完图片后置空图片路径
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+				
+			}
+	}
 			
 			/*
 			//4-16 发送图片
@@ -793,7 +848,7 @@ public class QqChat extends JFrame implements ActionListener{
 				}
 			}
 			*/
-		}
+		
 		
 		//自己添加第二次  3-17
 		else if(arg0.getSource()==jb1)
