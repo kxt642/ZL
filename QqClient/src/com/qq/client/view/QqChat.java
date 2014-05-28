@@ -91,7 +91,8 @@ public class QqChat extends JFrame implements ActionListener{
 	private SimpleAttributeSet tipAttrSet = null;//4-28  显示发送人和时间的样式
 	private Font f = null; // 字体对话框返回的字体。
 	
-	String screenCutImgName = "";//4-29afternoon
+	public static String screenCutImgName = "";//4-29afternoon  4-30改成static!!!!!!!!
+	public static String screenCutpath="";//4-30!!!!!!!!!!!
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -324,15 +325,21 @@ public class QqChat extends JFrame implements ActionListener{
 			}
 
 			private void screenFram() {
+				
+				/*
 				// 4-29afternoon 截图
 				try
 				{
 					ScreenFram.main();
 					
 					System.out.println("截图的名字是"+screenCutImgName);
+					//jtf.insertIcon(new ImageIcon(ImageIO
+						//	.read(new FileInputStream("./image/screenCut/snap.jpg"))));//4-30待改
+					
 					jtf.insertIcon(new ImageIcon(ImageIO
-							.read(new FileInputStream("./image/screenCut/snap.jpg"))));//4-30待改
-					screenCutImgName="snap";//4-30待改
+							.read(new FileInputStream(screenCutpath))));//4-30回宿舍之后
+					
+					//screenCutImgName="snap";//4-30待改
 				}
 				catch (FileNotFoundException e)
 				{
@@ -342,6 +349,16 @@ public class QqChat extends JFrame implements ActionListener{
 				{
 					e.printStackTrace();
 				}
+				*/
+				
+				//4-30回宿舍之后
+				try 
+				{
+					ScreenFram.main();
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				//4-30
 			}
 		});
 		//4-14
@@ -786,7 +803,8 @@ public class QqChat extends JFrame implements ActionListener{
 				jtf.setText("");//置空发送框
 				m.setSendTime(DateFormat.getTimeInstance().format(new Date()));
 				
-				File file=new File("./image/screenCut/snap.jpg");
+				//File file=new File("./image/screenCut/snap.jpg");//4-30回宿舍之后
+				File file = new File(screenCutpath);//4-30回宿舍之后
 				ArrayList<File>arrayList=new ArrayList<>();
 				arrayList.add(file);
 				m.setImgs(arrayList);
@@ -805,8 +823,11 @@ public class QqChat extends JFrame implements ActionListener{
 				{
 					jta.setCaretPosition(doc.getLength());
 					
+					//jta.insertIcon(new ImageIcon(ImageIO
+						//	.read(new FileInputStream("./image/screenCut/snap.jpg"))));//4-30回宿舍之后
+					
 					jta.insertIcon(new ImageIcon(ImageIO
-							.read(new FileInputStream("./image/screenCut/snap.jpg"))));
+							.read(new FileInputStream(screenCutpath))));//4-30回宿舍之后
 					
 					doc.insertString(doc.getLength(), "\n\n", null);
 					
